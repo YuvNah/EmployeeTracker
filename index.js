@@ -40,7 +40,29 @@ async function addDepatment() {
       },
     ])
     .then(async (answers) => {
-      await db.promise().query(`insert ${answers} to department`); //insert instead of select, the insert comes from the nswer
+      await db
+        .promise()
+        .query(`insert into department (name) VALUES (${answers})`); //insert instead of select, the insert comes from the nswer
+      console.table(department);
+    });
+}
+
+async function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "roleTitle",
+        message: "name the role",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary for this role?",
+      },
+    ])
+    .then(async (answers) => {
+      await db.promise().query(`insert into role (name) VALUES (${answers})`); //insert instead of select, the insert comes from the nswer
       console.table(department);
     });
 }
@@ -75,11 +97,11 @@ function userPrompts() {
         case "view all employees":
           viewEmployees();
           break;
-        case "add department":
+        case "add a department":
           addDepatment();
           break;
-        case "square":
-          generateSquare(answers);
+        case "add a role":
+          addRole();
           break;
       }
     });
