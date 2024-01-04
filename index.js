@@ -20,6 +20,16 @@ async function viewDepatments() {
   console.table(department);
 }
 
+async function viewRoles() {
+  const [role] = await db.promise().query("select * from role");
+  console.table(role);
+}
+
+async function viewEmployees() {
+  const [employee] = await db.promise().query("select * from employee");
+  console.table(employee);
+}
+
 async function addDepatment() {
   inquirer
     .prompt([
@@ -30,7 +40,7 @@ async function addDepatment() {
       },
     ])
     .then(async (answers) => {
-      await db.promise().query("select * from department"); //insert instead of select, the insert comes from the nswer
+      await db.promise().query(`insert ${answers} to department`); //insert instead of select, the insert comes from the nswer
       console.table(department);
     });
 }
@@ -59,8 +69,14 @@ function userPrompts() {
         case "view all departments":
           viewDepatments();
           break;
-        case "triangle":
-          generateTriangle(answers);
+        case "view all departments":
+          viewRoles();
+          break;
+        case "view all employees":
+          viewEmployees();
+          break;
+        case "add department":
+          addDepatment();
           break;
         case "square":
           generateSquare(answers);
