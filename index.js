@@ -83,7 +83,7 @@ async function addRole() {
 async function addEmployee() {
   const [role] = await db.promise().query("select * from role");
   const roles = role.map((role) => ({
-    value: role.title,
+    value: role.id,
     name: role.title,
   }));
   inquirer
@@ -109,8 +109,46 @@ async function addEmployee() {
       await db
         .promise()
         .query(
-          `insert into employee (first_name, last_name, role_id) VALUES ("${answers.firstName}", "${answers.lastName}", ${answers.roles})`
+          `insert into employee (first_name, last_name, role_id) VALUES ("${answers.firstName}", "${answers.lastName}", ${answers.role})`
         ); //insert instead of select, the insert comes from the nswer
+    });
+}
+
+async function updateEmployeeRole() {
+  const [employee] = await db.promise().query("select * from employee");
+  const employees = employee.map((employee) => ({
+    value: employee.id,
+    name: `${employee.first_name} ${employee.last_name} ${employee.id}`,
+  }));
+
+  const [role] = await db.promise().query("select * from role");
+  const roles = role.map((role) => ({
+    value: role.id,
+    name: role.title,
+  }));
+
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "employeeChoice",
+        message: "Choose the employee to update",
+        choices: employees,
+      },
+      {
+        type: "list",
+        name: "roleChoice",
+        message: "Choose the updated role for this employee",
+        choices: roles,
+      },
+    ])
+    .then(async (answers) => {
+      await db
+        .promise()
+        .query("UPDATE employee SET role_id = ? WHERE id = ?", [
+          answers.roleChoice,
+          answers.employeeChoice,
+        ]);
     });
 }
 
@@ -152,6 +190,9 @@ function userPrompts() {
           break;
         case "add an employee":
           addEmployee();
+          break;
+        case "update an employee role":
+          updateEmployeeRole();
           break;
       }
     });
