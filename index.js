@@ -75,12 +75,17 @@ async function addRole() {
     ])
     .then(async (answers) => {
       await db.promise().query(
-        `insert into role (title, salary, department_id) VALUES ("${answers.roleTitle}", "${answers.salary}", "${answers.department}" )` // how can i call the department id into here
+        `insert into role (title, salary, department_id) VALUES ("${answers.roleTitle}", ${answers.salary}, ${answers.department} )` // how can i call the department id into here
       );
     });
 }
 
 async function addEmployee() {
+  const [role] = await db.promise().query("select * from role");
+  const roles = role.map((role) => ({
+    value: role.title,
+    name: role.title,
+  }));
   inquirer
     .prompt([
       {
@@ -93,12 +98,18 @@ async function addEmployee() {
         name: "lastName",
         message: "Insert employee last name",
       },
+      {
+        type: "list",
+        name: "role",
+        message: "what is the role of this employee?",
+        choices: roles,
+      },
     ])
     .then(async (answers) => {
       await db
         .promise()
         .query(
-          `insert into emloyee (first_name, last_name) VALUES ("${answers.firstName}", "${answers.lastName}")`
+          `insert into employee (first_name, last_name, role_id) VALUES ("${answers.firstName}", "${answers.lastName}", ${answers.roles})`
         ); //insert instead of select, the insert comes from the nswer
     });
 }
@@ -127,7 +138,7 @@ function userPrompts() {
         case "view all departments":
           viewDepatments();
           break;
-        case "view all departments":
+        case "view all roles":
           viewRoles();
           break;
         case "view all employees":
@@ -138,6 +149,9 @@ function userPrompts() {
           break;
         case "add a role":
           addRole();
+          break;
+        case "add an employee":
+          addEmployee();
           break;
       }
     });
