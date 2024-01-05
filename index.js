@@ -62,13 +62,16 @@ async function addRole() {
         name: "salary",
         message: "What is the salary for this role?",
       },
+      {
+        type: "input",
+        name: "department",
+        message: "what is the department for this role?",
+      },
     ])
     .then(async (answers) => {
-      await db
-        .promise()
-        .query(
-          `insert into role (title, salary) VALUES ("${answers.roleTitle}", "${answers.salary}")`
-        ); //insert instead of select, the insert comes from the nswer
+      await db.promise().query(
+        `insert into role (title, salary) VALUES ("${answers.roleTitle}", "${answers.salary}" )` // how can i call the department id into here
+      );
     });
 }
 
@@ -90,7 +93,7 @@ async function addEmployee() {
       await db
         .promise()
         .query(
-          `insert into role (title, salary) VALUES ("${answers.roleTitle}", "${answers.salary}")`
+          `insert into emloyee (first_name, last_name) VALUES ("${answers.firstName}", "${answers.lastName}")`
         ); //insert instead of select, the insert comes from the nswer
     });
 }
