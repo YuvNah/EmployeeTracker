@@ -15,19 +15,42 @@ const db = mysql.createConnection(
   console.log(`Connected to the movies_db database.`)
 );
 
+function returnToMainMenu() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "returnToMenu",
+        message: "Would you like to rerutn to the main menu?",
+        choices: ["Yes, return to main menu", "No, exit application"],
+      },
+    ])
+    .then((answer) => {
+      if (answer.returnToMenu === "Yes, return to main menu") {
+        userPrompts();
+      } else {
+        console.log("Exiting the application. Goodbye!");
+        db.end();
+      }
+    });
+}
+
 async function viewDepatments() {
   const [department] = await db.promise().query("select * from department");
   console.table(department);
+  returnToMainMenu();
 }
 
 async function viewRoles() {
   const [role] = await db.promise().query("select * from role");
   console.table(role);
+  returnToMainMenu();
 }
 
 async function viewEmployees() {
   const [employee] = await db.promise().query("select * from employee");
   console.table(employee);
+  returnToMainMenu();
 }
 
 async function addDepatment() {
@@ -44,7 +67,7 @@ async function addDepatment() {
         .promise()
         .query(
           `insert into department (name) VALUES ("${answers.departmentName}")`
-        ); //insert instead of select, the insert comes from the nswer
+        );
     });
 }
 
