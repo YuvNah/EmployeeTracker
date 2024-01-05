@@ -40,10 +40,12 @@ async function addDepatment() {
       },
     ])
     .then(async (answers) => {
+      console.log(answers);
       await db
         .promise()
-        .query(`insert into department (name) VALUES (${answers})`); //insert instead of select, the insert comes from the nswer
-      console.table(department);
+        .query(
+          `insert into department (name) VALUES ("${answers.departmentName}")`
+        ); //insert instead of select, the insert comes from the nswer
     });
 }
 
@@ -62,8 +64,34 @@ async function addRole() {
       },
     ])
     .then(async (answers) => {
-      await db.promise().query(`insert into role (name) VALUES (${answers})`); //insert instead of select, the insert comes from the nswer
-      console.table(department);
+      await db
+        .promise()
+        .query(
+          `insert into role (title, salary) VALUES ("${answers.roleTitle}", "${answers.salary}")`
+        ); //insert instead of select, the insert comes from the nswer
+    });
+}
+
+async function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "Insert employee first name",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "Insert employee last name",
+      },
+    ])
+    .then(async (answers) => {
+      await db
+        .promise()
+        .query(
+          `insert into role (title, salary) VALUES ("${answers.roleTitle}", "${answers.salary}")`
+        ); //insert instead of select, the insert comes from the nswer
     });
 }
 
