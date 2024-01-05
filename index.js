@@ -40,7 +40,6 @@ async function addDepatment() {
       },
     ])
     .then(async (answers) => {
-      console.log(answers);
       await db
         .promise()
         .query(
@@ -50,6 +49,11 @@ async function addDepatment() {
 }
 
 async function addRole() {
+  const [department] = await db.promise().query("select * from department");
+  const departments = department.map((dept) => ({
+    value: dept.id,
+    name: dept.name,
+  }));
   inquirer
     .prompt([
       {
@@ -63,14 +67,15 @@ async function addRole() {
         message: "What is the salary for this role?",
       },
       {
-        type: "input",
+        type: "list",
         name: "department",
         message: "what is the department for this role?",
+        choices: departments,
       },
     ])
     .then(async (answers) => {
       await db.promise().query(
-        `insert into role (title, salary) VALUES ("${answers.roleTitle}", "${answers.salary}" )` // how can i call the department id into here
+        `insert into role (title, salary, department_id) VALUES ("${answers.roleTitle}", "${answers.salary}", "${answers.department}" )` // how can i call the department id into here
       );
     });
 }
