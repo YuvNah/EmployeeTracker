@@ -3,6 +3,8 @@ const fs = require("fs");
 const mysql = require("mysql2");
 require("console.table");
 
+/// this code is missing: the return to main menu prompt for the action functions (add and update), tidy up code - separate the functions from the prompts
+
 const db = mysql.createConnection(
   {
     host: "127.0.0.1",
@@ -97,9 +99,12 @@ async function addRole() {
       },
     ])
     .then(async (answers) => {
-      await db.promise().query(
-        `insert into role (title, salary, department_id) VALUES ("${answers.roleTitle}", ${answers.salary}, ${answers.department} )` // how can i call the department id into here
-      );
+      await db
+        .promise()
+        .query(
+          `insert into role (title, salary, department_id) VALUES ("${answers.roleTitle}", ${answers.salary}, ${answers.department} )`
+        )
+        .then(returnToMainMenu());
     });
 }
 
@@ -133,7 +138,8 @@ async function addEmployee() {
         .promise()
         .query(
           `insert into employee (first_name, last_name, role_id) VALUES ("${answers.firstName}", "${answers.lastName}", ${answers.role})`
-        ); //insert instead of select, the insert comes from the nswer
+        )
+        .then(returnToMainMenu());
     });
 }
 
@@ -171,7 +177,8 @@ async function updateEmployeeRole() {
         .query("UPDATE employee SET role_id = ? WHERE id = ?", [
           answers.roleChoice,
           answers.employeeChoice,
-        ]);
+        ])
+        .then(returnToMainMenu());
     });
 }
 
