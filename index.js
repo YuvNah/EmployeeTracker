@@ -1,7 +1,8 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-const mysql = require("mysql2");
+// const mysql = require("mysql2");
 require("console.table");
+const db = require("./db/connection");
 
 const { returnToMainMenu } = require("./lib/functions");
 const { viewDepatments } = require("./lib/functions");
@@ -13,17 +14,14 @@ const { addEmployee } = require("./lib/functions");
 const { updateEmployeeRole } = require("./lib/functions");
 /// this code is missing: the return to main menu prompt for the action functions (add and update), tidy up code - separate the functions from the prompts
 
-const db = mysql.createConnection(
-  {
-    host: "127.0.0.1",
-    // MySQL username,
-    user: "root",
-    // TODO: Add MySQL password here
-    password: "Scuba123!",
-    database: "employee_db",
-  },
-  console.log(`Connected to the movies_db database.`)
-);
+// const db = mysql.createConnection({
+//   host: "127.0.0.1",
+//   // MySQL username,
+//   user: "root",
+//   // TODO: Add MySQL password here
+//   password: "Scuba123!",
+//   database: "employee_db",
+// });
 
 // function returnToMainMenu() {
 //   inquirer
@@ -237,3 +235,5 @@ function userPrompts() {
 }
 
 userPrompts();
+
+module.exports = { userPrompts };
