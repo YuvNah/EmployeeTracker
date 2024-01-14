@@ -11,3 +11,4 @@ Choose what action you would like to do from the initial list, then follow the p
 ## Links
 
 Github - https://github.com/YuvNah/EmployeeTracker
+Video - https://drive.google.com/file/d/1F7xd3HwFmZDnZ6AGnPXEqdAY8RBNEaBr/view
